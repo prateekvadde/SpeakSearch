@@ -16,3 +16,9 @@ _________________________________
 8. move mouse (initiates head tracking)
 9. stop mouse (stops head tracking)
 10. click on the link that goes to _____ (useful when you want to click a link from a google search; not supported due to security restrictions; proof of concept)
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+credits:
+
+dlib
+opencv
+
