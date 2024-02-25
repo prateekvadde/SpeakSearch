@@ -1,49 +1,36 @@
-// Initialize speech recognition
 const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
 recognition.lang = 'en-US';
 recognition.interimResults = false;
 recognition.maxAlternatives = 1;
 recognition.continuous = true;
 
-// Get references to HTML elements
 const iframe = document.getElementById('webFrame');
 
-// Placeholder for eye tracking data
 let gazeCoordinates = { x: 0, y: 0 };
 
-// WebSocket connection to receive eye tracking data and send voice commands
 const ws = new WebSocket('ws://localhost:8765');
 
-// Update gaze coordinates when receiving eye tracking data
 ws.onmessage = (event) => {
     const [eyeX, eyeY] = event.data.split(',');
     updateGazeCoordinates(parseFloat(eyeX), parseFloat(eyeY));
 };
 
-// Function to update gaze coordinates when received from eye tracking system
 function updateGazeCoordinates(x, y) {
     gazeCoordinates.x = x;
     gazeCoordinates.y = y;
 }
 
-// Function to simulate a mouse click based on gaze coordinates
 function simulateMouseClick(buttonType = 'left') {
-    // The document.elementFromPoint call is not needed because
-    // the cursor is already at the target position due to head tracking.
-    // Thus, we can directly create and dispatch the mouse event to the active element or a specific target if needed.
-
-    // Determine the button type for the MouseEvent
     let eventType;
     let buttonValue;
     if (buttonType === 'right') {
         eventType = 'contextmenu';
-        buttonValue = 2; // Button code for right-click
+        buttonValue = 2; 
     } else {
         eventType = 'click';
-        buttonValue = 0; // Button code for left-click
+        buttonValue = 0; 
     }
 
-    // Create the MouseEvent with the specified options
     const event = new MouseEvent(eventType, {
         bubbles: true,
         cancelable: true,
@@ -51,13 +38,10 @@ function simulateMouseClick(buttonType = 'left') {
         button: buttonValue,
     });
 
-    // Dispatch the event to the currently active element or a specific target
-    // document.activeElement can be replaced with a more specific target if needed
     document.activeElement.dispatchEvent(event);
 }
 
 
-// Start speech recognition
 function startRecognition() {
     try {
         recognition.start();
@@ -69,13 +53,11 @@ function startRecognition() {
 
 startRecognition();
 
-// Handle speech recognition results
 recognition.onresult = (event) => {
     const last = event.results.length - 1;
     const command = event.results[last][0].transcript.trim().toLowerCase();
     console.log('Voice command:', command);
 
-    // Execute various commands based on voice input
     executeCommand(command);
 };
 
@@ -88,7 +70,6 @@ recognition.onend = () => {
     startRecognition();
 };
 
-// Function to execute various commands based on voice input
 function executeCommand(command) {
     if (command === 'mouse click' || command === 'left click mouse') {
         simulateMouseClick('left');
@@ -115,7 +96,6 @@ function executeCommand(command) {
     }
 }
 
-// Function to parse multiplier from command
 function parseMultiplier(command) {
     const parts = command.split(' ');
     const lastWord = parts[parts.length - 1];
@@ -127,8 +107,6 @@ function parseMultiplier(command) {
     }
 }
 
-// Function to convert text representation of numbers to actual numbers
-// Function to convert text representation of numbers to actual numbers
 function convertTextToNumber(text) {
     const numberWords = {
         one: 1,
@@ -141,17 +119,33 @@ function convertTextToNumber(text) {
         eight: 8,
         nine: 9,
         ten: 10
-        // Extend this object to support more numbers as needed
     };
-    return numberWords[text.toLowerCase()] || 1; // Default to 1 if the word is not found
+    return numberWords[text.toLowerCase()] || 1; 
 }
 
 // Function to search on Google
 function searchGoogle(command) {
-    const query = command.replace(/^search\s+/i, '').trim();
+    const commandLower = command.toLowerCase();
+    let searchType = '';
+    let searchUrl = 'https://www.google.com/search?q=';
+
+    if (commandLower.startsWith('search images ')) {
+        searchType = 'isch';
+        command = command.replace('search images ', '');
+    } else if (commandLower.startsWith('search shopping ')) {
+        searchType = 'shop';
+        command = command.replace('search shopping ', '');
+    }
+
+    const query = encodeURIComponent(command.trim());
+    if (searchType) {
+        searchUrl += `${query}&tbm=${searchType}`;
+    } else {
+        searchUrl += query;
+    }
+
     // Using a CORS proxy to bypass CORS restrictions
     const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-    const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
     const proxiedSearchUrl = `${proxyUrl}${searchUrl}`;
 
     fetch(proxiedSearchUrl)
@@ -161,7 +155,7 @@ function searchGoogle(command) {
             modifyIframeContentForCORS(iframe);
         })
         .catch(error => console.error('Error fetching search results:', error));
-}
+    }
 
 // Modify iframe content to handle link clicks through CORS proxy
 function modifyIframeContentForCORS(iframe) {
