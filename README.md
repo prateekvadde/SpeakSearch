@@ -9,7 +9,7 @@ _________________________________
 1. search _____
 2. search images ____
 3. search shopping _______
-4. go to _____._____
+4. go to _._
 5. scroll down/up by (the number of pixels you state will be multiplied by 100)
 6. left/right click mouse (not supported due to security restrictions; proof of concept)
 7. turn on/off dark mode
