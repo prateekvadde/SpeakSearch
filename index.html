@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Accessible Browser Control</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body.dark-mode {
+            background-color: #333;
+            color: #fff;
+        }
+        iframe {
+            width: 100%;
+            height: 90vh;
+            border: none;
+        }
+    </style>
+    <script src="https://unpkg.com/@ungap/custom-elements-builtin"></script>
+    <script type="module" src="https://unpkg.com/x-frame-bypass"></script>
+    <!-- Link to the external JavaScript file -->
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <h1>SpeakSearch</h1>
+    <p>Try commands like "search for dogs", "go to example.com", "search images dogs", or "search shopping dogs".</p>
+    <!-- Initialize without is="x-frame-bypass" to avoid the initial error -->
+    <button id="darkModeToggle">🌙</button>
+    <iframe id="webFrame" src="about:blank"></iframe>
+</body>
+</html>

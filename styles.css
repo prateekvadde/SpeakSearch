@@ -1,0 +1,157 @@
+/* Resets and Defaults */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.text-center {
+    text-align: center;
+}
+.hidden {
+    animation: fade-out 0.5s ease forwards;
+}
+
+/* Typography */
+body {
+    font-family: Arial, sans-serif; /* Use a more common font */
+    font-size: 16px;
+    line-height: 1.6;
+    color: #333; /* Use a default dark text color */
+    background-color: #f8f8f8; /* Lighter background for contrast */
+    animation: fade-down 0.5s 0.4s backwards;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #007bff; /* Blue for primary headings */
+    text-align: center;
+    animation: fade-down 0.5s 0.4s backwards;
+}
+
+p {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: #666; /* Slightly lighter text color */
+    text-align: center;
+    animation: fade-down 0.5s 0.4s backwards;
+}
+
+/* Utility Classes */
+.text-center {
+    text-align: center;
+}
+
+/* Components */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px; /* Less padding for a cleaner look */
+    animation: fade-down 0.5s 0.4s backwards;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 1rem;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    animation: fade-down 0.5s 0.4s backwards;
+}
+
+.button:hover {
+    background-color: #0056b3; /* Darker shade of blue on hover */
+}
+
+/* Dark Mode */
+.dark-mode {
+    background-color: #222; /* Dark background */
+    color: #fff;
+}
+.dark-mode p {
+    color: #fff; /* Lighter color for paragraphs in dark mode */
+}
+/* Toggle Button */
+#darkModeToggle {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    border: none;
+    background-color: transparent;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    z-index: 999;
+}
+
+#darkModeToggle:hover {
+    transform: scale(1.2);
+}
+
+@keyframes fade-down {
+    0% { 
+        transform: translateY(-30px) scale(0.9); 
+        opacity: 0; }
+    100% { 
+        transform: translateY(0px) scale(1); 
+        opacity: 1; }
+  }
+@keyframes fade-out {
+    from {scale: (1); opacity: 1;}
+    to {scale: (0.8); opacity: 0;}
+}
+/* Responsive Design */
+@media screen and (max-width: 1200px) {
+    .container {
+        padding: 0 10px; /* Smaller padding for smaller screens */
+    }
+}
+
+@media screen and (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+    p {
+        font-size: 1rem;
+    }
+    .button {
+        padding: 8px 16px;
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+    }
+}
+
+
+@media screen and (max-width: 576px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+    p {
+        font-size: 0.8rem;
+    }
+    .button {
+        padding: 6px 12px;
+        margin-top: 0.3rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .button {
+        padding: 4px 10px;
+        margin-top: 0.2rem;
+        font-size: 0.7rem;
+    }
+}
