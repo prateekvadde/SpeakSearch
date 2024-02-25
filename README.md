@@ -4,7 +4,7 @@ _________________________________
 2. open index.html
 3. allow microphone permission
 4. You can now use the commands listed below:
-
+---------------------------------------------------
 
 1. search _____
 2. search images ____
