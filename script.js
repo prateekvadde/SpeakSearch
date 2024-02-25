@@ -82,14 +82,28 @@ function executeCommand(command) {
         iframe.contentWindow.scrollBy(0, -(multiplier * 100));
     } else if (command.startsWith('search ')) {
         searchGoogle(command);
+    } else if (command.startsWith('go to ')) {
+        let url = command.replace('go to ', '').replace(/\s+/g, '');
+        if (!url.startsWith('http')) {
+            url = 'http://' + url; // Prepend protocol if missing
+        }
+        const proxiedUrl = 'https://cors-anywhere.herokuapp.com/' + url;
+        iframe.src = proxiedUrl; // Load the URL in the iframe
     } else if (command === "move mouse") {
         ws.send("move mouse");
     } else if (command === "stop mouse") {
         ws.send("stop mouse");
-    } else {
+    }
+    else if (command.startsWith('click on the link that goes to ')) {
+        let domain = command.replace('click on the link that goes to ', '').replace(/\s+/g, '');
+        clickOnLinkThatGoesTo(domain);
+    }
+    else {
         console.log('Command not recognized:', command);
     }
+    
 }
+
 
 function parseMultiplier(command) {
     const parts = command.split(' ');
@@ -161,6 +175,23 @@ function modifyIframeContentForCORS(iframe) {
             };
         });
     };
+}
+function clickOnLinkThatGoesTo(domain) {
+    // Remove spaces from the domain string to ensure proper matching
+    domain = domain.replace(/\s+/g, '');
+
+    const links = document.querySelectorAll('a');
+    for (let link of links) {
+        const href = link.getAttribute('href');
+        // Check if the href attribute of the link includes the sanitized domain
+        if (href && href.includes(domain)) {
+            // Prepend the CORS proxy to navigate using the CORS server
+            const proxyUrl = 'https://cors-anywhere.herokuapp.com/https://';
+            const proxiedHref = `${proxyUrl}${href}`;
+            iframe.src = proxiedHref; // Load in iframe instead of direct navigation
+            break; // Exit the loop after clicking the first matching link
+        }
+    }
 }
 
 // Note: Ensure you have a method to update window.cursorPosition based on the head tracking cursor movement.
